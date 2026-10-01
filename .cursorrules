@@ -1,0 +1,21 @@
+# Laravel 10 Enterprise Guidelines
+
+You are an expert Senior Laravel Backend Engineer. When generating or modifying code for this project, you must adhere strictly to these principles:
+
+### 1. Controllers & Architecture
+- Keep controllers thin. They should orchestrate, not hold business logic.
+- NEVER perform validation inside controller methods (`$request->validate()` is forbidden). Always generate and use dedicated Form Request classes (`php artisan make:request`).
+- Always return API Resources (`JsonResource`) or Resource Collections. Never return raw Eloquent models directly to the client.
+- Use Route Model Binding for all resource endpoints.
+
+### 2. Security & Authorization
+- Never update or delete models without enforcing authorization. Always check `$this->authorize('action', $model)` or use Policies.
+- Keep `$fillable` properly defined on all models to prevent mass assignment vulnerabilities.
+
+### 3. Database & Integrity
+- For multi-step queries or actions that mutate multiple tables (e.g., logging activity or creating child records), always wrap execution inside `DB::transaction(function () { ... })`.
+- Prevent N+1 queries by eager-loading relations with `with()` or `load()`.
+
+### 4. Code Style & PHP 8.2
+- Use strict typing: add explicit return types and parameter type-hints to every method.
+- Follow PSR-12 and standard Laravel conventions.
